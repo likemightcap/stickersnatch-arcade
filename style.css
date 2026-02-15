@@ -1656,12 +1656,28 @@ canvas{
   text-shadow: 0 0 10px var(--primary-glow);
   animation: coinBlink 1.5s infinite;
   white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+
+.insertCoinMessage:active {
+  transform: scale(0.95);
 }
 
 .creditCounter {
   color: var(--primary-color);
   text-shadow: 0 0 8px var(--primary-glow);
   white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+
+.creditCounter:active {
+  transform: scale(0.95);
 }
 
 @keyframes coinBlink {

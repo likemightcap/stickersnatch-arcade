@@ -11472,6 +11472,20 @@ async function unlockAudio() {
     
     // ===== ARCADE: Load credits =====
     loadCredits();
+    
+    // Add touch/click support for credit display to add credits
+    if (insertCoinMessage) {
+      insertCoinMessage.addEventListener('click', (e) => {
+        e.preventDefault();
+        addCredit();
+      });
+    }
+    if (creditCounter) {
+      creditCounter.addEventListener('click', (e) => {
+        e.preventDefault();
+        addCredit();
+      });
+    }
     // ===== END ARCADE =====
 
     // Initialize settings UI

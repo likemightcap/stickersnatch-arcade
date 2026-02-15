@@ -385,9 +385,15 @@ canvas{
 #secretGameOverOverlay .pixelCard,
 #installInstructionsOverlay .pixelCard,
 #sharePreviewOverlay .pixelCard,
-#themeColorOverlay .pixelCard {
+#themeColorOverlay .pixelCard,
+#controlTestOverlay .pixelCard {
   background: var(--panelBg);
   border: 3px solid var(--panelBorder);
+}
+
+/* Control test overlay on top of everything for debugging */
+#controlTestOverlay {
+  z-index: 10000;
 }
 
 /* ===== GAME MODE SELECTION OVERLAY ===== */

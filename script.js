@@ -3150,6 +3150,7 @@ let introBeamActive = false; // Track if beam should be rendered on canvas
 let introBeamHeight = 0; // Height of beam during descent/retract animation (0 to full height)
 let introBossImage = 'bren1'; // Which boss image to show during intro (bren1, bren2, or bren3)
 let introBossText = ''; // Boss taunt text during intro
+let introPlayerText = ''; // Player goat dialogue text during intro
 let introStickers = []; // Array of stickers flying during intro {x, y, rotation, opacity, isThick, startTime, duration}
 let introBossAscending = false; // Track if boss is ascending (stickers should move with it)
 let introBossStartAscendY = 0; // Boss Y position when ascent starts
@@ -3329,6 +3330,7 @@ function skipIntroSequence() {
   introBossStartAscendY = 0;
   introBossImage = 'bren1';
   introBossText = '';
+  introPlayerText = '';
   bossY = -200;
   playerHasEntered = true; // Mark player as entered
   
@@ -3518,6 +3520,25 @@ async function playGameIntroSequence() {
       introBossText = '';
       introBossImage = 'bren1'; // Stop on bren1
       if (blinkInterval) clearInterval(blinkInterval);
+      
+      // Player goat responds: "BAAAA-CK OFF" (7.5s - 8.5s)
+      introPlayerText = 'BAAAA-CK OFF';
+      const goatAudio1 = new Audio(ASSETS.sounds.levelDisplay);
+      goatAudio1.volume = (sfxVolume / 100) * 0.75;
+      goatAudio1.play().catch(err => console.log('Goat audio 1 play failed:', err));
+      
+      // Player goat second line: "I'LL EAT THE MAP" (8.5s - 9.5s)
+      introTimeouts.push(setTimeout(() => {
+        introPlayerText = "I'LL EAT THE MAP";
+        const goatAudio2 = new Audio(ASSETS.sounds.levelDisplay);
+        goatAudio2.volume = (sfxVolume / 100) * 0.75;
+        goatAudio2.play().catch(err => console.log('Goat audio 2 play failed:', err));
+        
+        // Clear player text at 9.5s
+        introTimeouts.push(setTimeout(() => {
+          introPlayerText = '';
+        }, 1000));
+      }, 1000));
     }, timeline.taunt2End * 1000));
     
     // Switch to bren3 when beam starts (10s)
@@ -3663,6 +3684,17 @@ async function playGameIntroSequence() {
           introBossText = '';
           introBossImage = 'bren1';
           clearInterval(finalBlinkInterval);
+          
+          // Player goat final response: "GIVE ME BAAA-CK MY STICKERS" (21.5s - 23.5s)
+          introPlayerText = 'GIVE ME BAAA-CK MY STICKERS';
+          const goatAudio3 = new Audio(ASSETS.sounds.levelDisplay);
+          goatAudio3.volume = (sfxVolume / 100) * 0.75;
+          goatAudio3.play().catch(err => console.log('Goat audio 3 play failed:', err));
+          
+          // Clear player text as boss ascends (23.5s)
+          introTimeouts.push(setTimeout(() => {
+            introPlayerText = '';
+          }, 2000));
         }, (timeline.finalTauntEnd - timeline.finalTauntStart) * 1000));
       }, (timeline.finalTauntStart - timeline.finalTauntBlinkStart) * 1000));
     }, timeline.finalTauntBlinkStart * 1000));
@@ -3704,6 +3736,7 @@ async function playGameIntroSequence() {
       introBossStartAscendY = 0;
       introBossImage = 'bren1';
       introBossText = '';
+      introPlayerText = '';
       bossY = -200; // Reset boss position
       
       // Hide skip indicator
@@ -10673,6 +10706,54 @@ async function unlockAudio() {
     ctx.rotate(playerRotation);
     ctx.drawImage(playerImg, -PLAYER_W/2, -PLAYER_H/2, PLAYER_W, PLAYER_H);
     ctx.restore();
+    
+    // Draw player goat dialogue text during intro (positioned to the left of player)
+    if (introSequencePlaying && introPlayerText) {
+      ctx.save();
+      ctx.font = 'bold 12px "Press Start 2P", monospace';
+      ctx.fillStyle = THEME_COLOR; // Theme color
+      ctx.textAlign = 'right'; // Align right so text ends near player
+      ctx.textBaseline = 'middle';
+      
+      // Position text to the left of the player
+      const textX = wobbleX - PLAYER_W/2 - 4; // Leave 4px gap
+      const textY = wobbleY;
+      const maxWidth = textX - 15; // Leave 15px margin on left
+      
+      // Add text shadow for better visibility
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      
+      // Word wrap the text
+      const words = introPlayerText.toUpperCase().split(' ');
+      const lines = [];
+      let currentLine = words[0];
+      
+      for (let i = 1; i < words.length; i++) {
+        const testLine = currentLine + ' ' + words[i];
+        const metrics = ctx.measureText(testLine);
+        
+        if (metrics.width > maxWidth) {
+          lines.push(currentLine);
+          currentLine = words[i];
+        } else {
+          currentLine = testLine;
+        }
+      }
+      lines.push(currentLine);
+      
+      // Draw each line
+      const lineHeight = 16;
+      const startY = textY - ((lines.length - 1) * lineHeight) / 2;
+      
+      lines.forEach((line, index) => {
+        ctx.fillText(line, textX, startY + (index * lineHeight));
+      });
+      
+      ctx.restore();
+    }
     } // End player drawing conditional
 
     // Draw floating texts (thick sticker +100 feedback)

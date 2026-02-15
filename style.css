@@ -582,6 +582,13 @@ canvas{
     outline-offset: 3px;
     box-shadow: 0 0 15px var(--primary-glow);
   }
+  
+  /* Color choice button keyboard focus */
+  .colorChoiceBtn.keyboard-focused {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 3px;
+    box-shadow: 0 0 15px var(--primary-glow);
+  }
 }
 
 .countdownCard{

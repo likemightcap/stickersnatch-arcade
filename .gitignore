@@ -1,0 +1,6 @@
+# Exclude large video file
+assets/clips/attract-main-1.mp4
+
+# macOS
+.DS_Store
+._*

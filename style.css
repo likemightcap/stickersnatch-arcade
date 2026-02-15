@@ -1,0 +1,1884 @@
+/* Local Press Start 2P font for offline use */
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/press-start-2p-v16-latin-regular.woff2') format('woff2');
+}
+
+:root{
+  --bg: #0b0f16;
+  --white: #ffffff;
+  --shadow: rgba(0,0,0,0.35);
+
+  /* Theme color system - can be changed dynamically */
+  --theme-color: #f3e200;
+  --theme-color-0: rgba(243,226,0,0);
+  --theme-color-10: rgba(243,226,0,0.1);
+  --theme-color-15: rgba(243,226,0,0.15);
+  --theme-color-20: rgba(243,226,0,0.2);
+  --theme-color-28: rgba(243,226,0,0.28);
+  --theme-color-30: rgba(243,226,0,0.3);
+  --theme-color-35: rgba(243,226,0,0.35);
+  --theme-color-40: rgba(243,226,0,0.4);
+  --theme-color-60: rgba(243,226,0,0.6);
+  --theme-color-70: rgba(243,226,0,0.7);
+  --theme-color-80: rgba(243,226,0,0.8);
+  --theme-color-90: rgba(243,226,0,0.9);
+  
+  /* Primary color scheme (uses theme color) */
+  --primary-color: var(--theme-color);
+  --primary-glow: var(--theme-color);
+  
+  /* Primary color variants with opacity */
+  --primary-10: var(--theme-color-10);
+  --primary-20: var(--theme-color-20);
+  --primary-28: var(--theme-color-28);
+  --primary-30: var(--theme-color-30);
+  --primary-35: var(--theme-color-35);
+  --primary-40: var(--theme-color-40);
+  --primary-60: var(--theme-color-60);
+  --primary-70: var(--theme-color-70);
+  --primary-80: var(--theme-color-80);
+  --primary-90: var(--theme-color-90);
+
+  /* New HUD theme */
+  --hudBg: #000000;
+  --hudText: var(--primary-color);
+  --hudBorder: var(--primary-28);
+
+  /* Overlay theme (solid, boxy) */
+  --panelBg: #0a0a0a;
+  --panelBorder: var(--theme-color);
+
+  /* Achievement colors */
+  --achievementYellow: var(--theme-color);
+  --achievementGreen: #4caf50;
+}
+
+*{ box-sizing:border-box; }
+html,body{ 
+  height:100%; 
+  /* Prevent pull-to-refresh and overscroll bounce on mobile */
+  overscroll-behavior: none;
+}
+body{
+  margin:0;
+  background: radial-gradient(1200px 800px at 50% 20%, var(--primary-color) 0%, #000000 60%);
+  color: var(--white);
+  font-family: 'Press Start 2P', monospace;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 4px;
+  /* Prevent text selection on mobile */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ===== LOADING SCREEN ===== */
+.loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(1200px 800px at 50% 20%, var(--primary-color) 0%, #000000 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.5s ease;
+}
+
+.loadingOverlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loadingContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.loadingSpinner {
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+  filter: drop-shadow(0 0 10px var(--primary-glow));
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Life Reaction Animations */
+@keyframes lifeLoss {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-3px, 0); }
+  20% { transform: translate(3px, 0); }
+  30% { transform: translate(-3px, 0); }
+  40% { transform: translate(3px, 0); }
+  50% { transform: translate(-2px, 0); }
+  60% { transform: translate(2px, 0); }
+  70% { transform: translate(0, 0); }
+}
+
+@keyframes lifeGain {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.4); }
+  40% { transform: scale(1.2); }
+  60% { transform: scale(1.3); }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes lifeTextLoss {
+  0%, 100% { color: var(--white); }
+  15%, 35%, 55% { color: #ff0000; }
+  25%, 45%, 70% { color: var(--white); }
+}
+
+@keyframes lifeTextGain {
+  0%, 100% { color: var(--white); }
+  15%, 35%, 55% { color: #00ff00; }
+  25%, 45%, 70% { color: var(--white); }
+}
+
+.hudIcon.life-loss {
+  animation: lifeLoss 0.5s ease-out;
+}
+
+.hudIcon.life-gain {
+  animation: lifeGain 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.hudValue.life-text-loss {
+  animation: lifeTextLoss 0.5s ease-out;
+}
+
+.hudValue.life-text-gain {
+  animation: lifeTextGain 0.6s ease-out;
+}
+
+.loadingText {
+  font-size: 16px;
+  color: var(--white);
+  text-shadow: 2px 2px 0 var(--shadow);
+}
+
+.loadingBar {
+  width: 200px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.loadingBarFill {
+  height: 100%;
+  background: var(--primary-color);
+  width: 0%;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+/* ========================== */
+
+
+
+.app{ 
+  /* Base dimensions for scaling (9:16 aspect ratio) */
+  width: 360px;
+  height: 640px;
+  /* Will be scaled dynamically via JavaScript for arcade display */
+  /* Prevent text selection */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  /* Prevent pull-to-refresh within the game container */
+  overscroll-behavior: none;
+}
+
+.gameShell{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  box-shadow: 0 24px 70px var(--shadow);
+  background: #000;
+  border-radius: 18px;
+  /* Prevent text selection and touch callouts */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  /* Prevent tap highlight */
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent pull-to-refresh on the game container */
+  overscroll-behavior: none;
+  /* CRITICAL: Prevent iPhone text selection loupe on press-hold - DO NOT CHANGE */
+  touch-action: none;
+}
+
+canvas{
+  width: 100%;
+  height: 100%;
+  display:block;
+  image-rendering: pixelated;
+  /* Prevent selection and long-press menu on mobile */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+.touchShield{
+  position:absolute;
+  inset:0;
+  touch-action: manipulation;
+  pointer-events:none;
+}
+
+/* Pixel font helper */
+.pixelText{
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* HUD */
+.hud{
+  position:absolute;
+  left: 10px;
+  right: 10px;
+  top: 10px;
+  pointer-events:none;
+  z-index: 5;
+}
+
+.hudRow{
+  display:flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.hudBox{
+  flex: 1 1 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+  padding: 10px 8px;
+  background: var(--hudBg);
+  border: 2px solid var(--hudBorder);
+  border-radius: 0; /* boxy */
+}
+
+.hudLabel, .hudValue{
+  font-size: 10px;
+  line-height: 1.1;
+  color: var(--hudText);
+  white-space: nowrap;
+}
+
+.hudLabel{ opacity: 0.9; }
+
+.hudIcon{
+  width: 18px;
+  height: 18px;
+  image-rendering: pixelated;
+}
+
+#hudStickerIcon{
+  width: auto;
+  height: 18px;
+}
+
+.hudBox.hidden{
+  display: none;
+}
+
+/* Mobile-only pause instruction */
+.pauseInstruction {
+  position: absolute;
+  top: 75px; /* Aligned with timer Y position */
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: fit-content;
+  text-align: center;
+  font-size: 10px; /* Increased from 8px */
+  color: var(--theme-color); /* Yellow */
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: none; /* Hidden by default, shown only on mobile */
+  white-space: nowrap; /* Keep text on one line */
+  
+  /* Dark background matching HUD style */
+  background: var(--hudBg);
+  border: 2px solid var(--hudBorder);
+  padding: 8px 12px;
+  border-radius: 0; /* boxy */
+}
+
+.pauseInstruction.show {
+  opacity: 1;
+  animation: pausePulse 2s ease-in-out infinite; /* Subtle pulse */
+}
+
+@keyframes pausePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Overlays */
+.overlay{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding: 18px;
+  background: rgba(0,0,0,0);
+  z-index: 10;
+}
+
+#outOfTimeOverlay .title{
+  font-size: 16px;
+}
+
+
+.overlay.show{ display:flex; }
+
+/* solid, boxy panel */
+.pixelCard{
+  width: min(420px, 100%);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 14px 12px;
+  text-align:center;
+  box-shadow: none;
+}
+
+/* Restore background/border for specific overlays */
+#howToPlayOverlay .pixelCard,
+#settingsOverlay .pixelCard,
+#statsOverlay .pixelCard,
+#countdownOverlay .pixelCard,
+#winOverlay .pixelCard,
+#gameOverOverlay .pixelCard,
+#outOfTimeOverlay .pixelCard,
+#secretWinOverlay .pixelCard,
+#secretGameOverOverlay .pixelCard,
+#installInstructionsOverlay .pixelCard,
+#sharePreviewOverlay .pixelCard,
+#themeColorOverlay .pixelCard {
+  background: var(--panelBg);
+  border: 3px solid var(--panelBorder);
+}
+
+/* ===== GAME MODE SELECTION OVERLAY ===== */
+.gameModeCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 420px;
+  margin-top: 80px; /* Position below the docked logo */
+  background: transparent !important;
+  border: none !important;
+}
+
+.gameModeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gameModeMainBtn,
+.gameModeSurvivalBtn {
+  width: 100%;
+  font-size: 14px !important;
+  padding: 16px 20px !important;
+  min-height: 56px;
+}
+
+.gameModeSubButtons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.gameModeSubBtn {
+  flex: 1;
+  font-size: 10px !important;
+  padding: 12px 8px !important;
+  min-height: 44px;
+}
+
+/* Hide survival section when feature flag is off */
+#survivalModeSection.hidden {
+  display: none;
+}
+/* ===== END GAME MODE SELECTION OVERLAY ===== */
+
+/* ===== SURVIVAL GAME OVER OVERLAY ===== */
+.survivalTimeDisplay {
+  font-size: 48px !important;
+  color: var(--hudText);
+  text-shadow: 3px 3px 0 #000;
+  margin: 16px 0;
+  line-height: 1.2;
+}
+
+.survivalPointsDisplay {
+  font-size: 32px !important;
+  color: var(--hudText);
+  text-shadow: 2px 2px 0 #000;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+#survivalGameOverOverlay .pixelCard {
+  background: var(--panelBg);
+  border: 3px solid var(--panelBorder);
+}
+/* ===== END SURVIVAL GAME OVER OVERLAY ===== */
+
+.title{
+  font-size: 16px;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  color: var(--hudText);
+}
+
+.subtitle{
+  font-size: 10px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  color: var(--hudText);
+  opacity: 0.95;
+}
+
+.hint{
+  font-size: 8px;
+  line-height: 1.6;
+  color: #ffffff;
+  opacity: 0.95;
+}
+
+.pointsGrid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 6px 0;
+  padding: 0 10px;
+}
+
+.pointsColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.pointsImage {
+  width: 38px;
+  height: auto;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.pointsImage.stickerImage,
+.pointsImage.thickStickerImage {
+  width: 38px;
+  height: auto;
+}
+
+.pointsImage.drunkPowerup {
+  width: 38px;
+  height: auto;
+}
+
+.codeLabel{
+  margin-top: 4px;           /* Minimal margin to save space */
+  font-size: clamp(5px, 1.5vw, 14px); /* Scales with credits text */
+  color: var(--hudText);
+}
+
+.codeBox{
+  margin: 10px auto 14px;
+  padding: 12px 10px;
+  border-radius: 0;
+  border: 2px dashed var(--primary-60);
+  background: #000;
+  font-size: 11px;
+  color: var(--hudText);
+  word-break: break-word;
+}
+
+.pixelBtn{
+  border-radius: 0;
+  border: 2px solid var(--primary-70);
+  background: #000;
+  color: var(--hudText);
+  pointer-events: auto; /* Ensure buttons are clickable */
+}
+
+.btn{
+  font-size: 11px;
+  padding: 12px 14px;
+  cursor:pointer;
+  pointer-events: auto; /* Ensure buttons are clickable */
+  transition: transform 0.1s ease, box-shadow 0.2s ease, outline 0.2s ease;
+}
+.btn:active{ 
+  transform: scale(0.95) translateY(1px);
+}
+
+/* Keyboard navigation focus styling - Desktop only */
+@media (hover: hover) and (pointer: fine) {
+  .btn.keyboard-focused,
+  .tab.keyboard-focused,
+  .leaderboardTab.keyboard-focused {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 3px;
+    box-shadow: 0 0 15px var(--primary-glow);
+  }
+
+  /* Slider and toggle keyboard focus - highlight the entire control */
+  input[type="range"].keyboard-focused,
+  .toggleBtn.keyboard-focused {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 3px;
+    box-shadow: 0 0 15px var(--primary-glow);
+    border-radius: 4px;
+  }
+  
+  /* Achievement slot keyboard focus */
+  .achievementSlot.keyboard-focused {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 3px;
+    box-shadow: 0 0 15px var(--primary-glow);
+  }
+}
+
+.countdownCard{
+  width: min(340px, 90%);     /* Slightly smaller max width for padding */
+  padding: 20px;              /* Add padding so text doesn't touch edges */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdownText{
+  font-size: clamp(32px, 12vw, 56px); /* Responsive: 32px (small) to 56px (large) */
+  line-height: 1;
+  color: var(--hudText);
+  text-align: center;         /* Ensure text is centered */
+  word-wrap: break-word;      /* Allow text to wrap if needed */
+}
+
+/* Smaller text for "SECRET LEVEL" to prevent wrapping */
+.countdownText.secretLevel {
+  font-size: clamp(24px, 8vw, 40px); /* Smaller to fit two words */
+  line-height: 1.1;
+}
+
+/* Smaller text for "SURVIVE" to fit within bounds */
+.countdownText.survive {
+  font-size: clamp(24px, 9vw, 42px); /* Scaled down to fit comfortably */
+  line-height: 1.1;
+}
+
+/* Boss warning style with red pulsing text */
+.countdownText.bossWarning {
+  color: #ff0000;
+  animation: bossWarningPulse 0.4s ease-in-out infinite;
+  font-size: clamp(16px, 6vw, 32px); /* Reduced from 8vw/44px */
+  white-space: nowrap; /* Prevent text from wrapping */
+  text-align: center;
+}
+
+/* Hide the card background for boss warnings */
+.countdownCard:has(.bossWarning) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ===== BOSS INTRO OVERLAY ===== */
+#bossIntroOverlay {
+  background: transparent; /* No dark background - see through to canvas */
+  pointer-events: none; /* Don't block canvas rendering */
+}
+
+.bossIntroCard {
+  text-align: center;
+  animation: bossIntroShake 0.5s ease-in-out;
+}
+
+.bossIntroName {
+  font-size: clamp(32px, 10vw, 64px); /* Reduced from 12vw/80px */
+  color: #ff0000;
+  text-shadow: 
+    4px 4px 0 #000,
+    0 0 20px #ff0000,
+    0 0 40px #ff0000;
+  letter-spacing: 6px; /* Reduced from 8px */
+  margin-bottom: 20px;
+  animation: bossNameGlow 1s ease-in-out infinite alternate;
+}
+
+.bossIntroSubtitle {
+  font-size: clamp(10px, 2.5vw, 16px); /* Reduced from 3vw/20px */
+  color: var(--primary-color);
+  text-shadow: 2px 2px 0 #000;
+  letter-spacing: 3px; /* Reduced from 4px */
+  opacity: 0;
+  animation: bossSubtitleFadeIn 0.5s ease-in 0.3s forwards;
+}
+
+@keyframes bossIntroShake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5px, -5px); }
+  20% { transform: translate(5px, 5px); }
+  30% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  50% { transform: translate(-3px, -3px); }
+  60% { transform: translate(3px, 3px); }
+  70% { transform: translate(-2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  90% { transform: translate(-1px, 1px); }
+}
+
+@keyframes bossNameGlow {
+  from {
+    text-shadow: 
+      4px 4px 0 #000,
+      0 0 20px #ff0000,
+      0 0 40px #ff0000;
+  }
+  to {
+    text-shadow: 
+      4px 4px 0 #000,
+      0 0 30px #ff0000,
+      0 0 60px #ff0000,
+      0 0 80px #ff0000;
+  }
+}
+
+@keyframes bossSubtitleFadeIn {
+  to { opacity: 1; }
+}
+/* ===== END BOSS INTRO OVERLAY ===== */
+
+@keyframes bossWarningPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Achievement Notification */
+#achievementNotification {
+  position: absolute;
+  top: 90px; /* Position below HUD - same as highScoreBanner */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15; /* Same level as high score banner */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  width: calc(100% - 20px); /* Wider, closer to edges */
+  max-width: 500px;
+}
+
+#achievementNotification.show {
+  opacity: 1;
+}
+
+.achievementNotificationCard {
+  background: var(--panelBg); /* Dark background */
+  border: 3px solid var(--panelBorder); /* Yellow border */
+  box-shadow: none;
+  padding: 12px;
+  display: flex;
+  flex-direction: row; /* Horizontal layout */
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.achievementNotificationImage {
+  width: 60px;
+  height: 60px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.achievementNotificationTextColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  flex: 1;
+  overflow: hidden;
+}
+
+.achievementNotificationText {
+  font-size: 8px; /* Smaller to prevent wrapping */
+  color: var(--achievementYellow);
+  text-align: left;
+  white-space: nowrap; /* No wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.achievementNotificationName {
+  font-size: 7px; /* Smaller to prevent wrapping */
+  color: var(--hudText);
+  text-align: left;
+  white-space: nowrap; /* No wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* Title Screen */
+.titleCard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding-top: 200px; /* Push button below the centered logo */
+}
+
+/* Title screen credits */
+.titleCredits {
+  position: absolute;
+  bottom: 120px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.titleCreditsLine {
+  font-size: 8px;
+  line-height: 1.3;
+  color: var(--theme-color);
+  text-align: center;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+  white-space: nowrap;
+}
+
+/* Persistent game logo (animates from title to menu) */
+.gameLogo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) translateY(-60px);
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  z-index: 100;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 350ms ease-out;
+}
+
+/* Docked state (on menu screen) */
+.gameLogo.logo--docked {
+  transform: translate(-50%, -50%) translateY(-140px);
+}
+
+/* Hide logo when not on title or menu screens */
+.gameLogo.logo--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease-out;
+}
+
+/* Menu Screen (4 buttons) */
+#menuOverlay .overlayCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 20px;
+  margin-top: 120px; /* Make room for docked logo */
+}
+
+#menuOverlay .btn {
+  width: 100%;
+}
+
+.titleImage{
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  image-rendering: pixelated;
+  margin-bottom: 8px;
+}
+
+.installBtn {
+  font-size: 9px;
+  padding: 8px 12px;
+  background: #1a1a1a;
+  border: 2px solid #4CAF50;
+  color: #4CAF50;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.installBtn:hover {
+  background: #4CAF50;
+  color: #000;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+  }
+  50% {
+    border-color: #66BB6A;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.6);
+  }
+}
+
+/* Banner locked bottom */
+.bannerBar{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  width: 100%;               /* Always full width */
+  height: auto;              /* Let height be determined by aspect ratio */
+  aspect-ratio: 513 / 93;    /* Maintain original banner aspect ratio (5.5:1) */
+  z-index: 6;                /* above canvas, below overlays? keep visible always */
+  pointer-events:none;
+  background: #000;          /* in case image has transparency */
+}
+
+.bannerBar img{
+  width:100%;
+  height:100%;
+  object-fit: contain;       /* Keep aspect ratio, no stretching/cropping */
+  object-position: bottom;   /* Align to bottom */
+  display:block;
+  image-rendering: pixelated;
+}
+
+/* New High Score Banner - HIDDEN FOR ARCADE */
+.highScoreBanner {
+  display: none !important; /* Arcade cabinet: hide high score banner */
+  position: absolute;
+  top: 90px; /* Position below HUD (~50px HUD + 40px spacing) */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15; /* Above overlays (z-index: 10) */
+  pointer-events: none;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: highScorePulse 0.8s ease-in-out infinite;
+}
+
+.highScoreBanner.show {
+  opacity: 1;
+}
+
+.highScoreText {
+  font-size: 14px;
+  font-weight: bold;
+  color: #4CAF50;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  margin: 2px 0;
+  line-height: 1.4;
+}
+
+@keyframes highScorePulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* Win overlay name input */
+.nameInputRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px auto;
+  max-width: 320px;
+  align-items: center;
+}
+
+.nameInput {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 11px;
+  background: #000;
+  border: 2px solid var(--primary-70);
+  color: var(--hudText);
+  border-radius: 0;
+  outline: none;
+  /* Allow text selection and interaction in input fields */
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+  pointer-events: auto;
+}
+
+.nameInput::placeholder {
+  color: var(--primary-40);
+}
+
+.nameInput:focus {
+  border-color: var(--hudText);
+  box-shadow: 0 0 8px var(--primary-30);
+}
+
+.okBtn {
+  flex-shrink: 0;
+  padding: 10px 20px;
+  font-size: 11px;
+}
+
+.statusMessage {
+  min-height: 20px;
+  font-size: 10px;
+  color: #4CAF50;
+  margin-bottom: 10px;
+}
+
+/* Leaderboard list */
+.leaderboardCard {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Leaderboard tabs */
+.leaderboardTabs {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0 8px 0;
+  justify-content: center;
+}
+
+/* Generic tab group (reusable for all overlays with tabs) */
+.tabGroup {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  justify-content: center;
+}
+
+.tab {
+  flex: 1;
+  max-width: 150px;
+  padding: 10px 12px;
+  font-size: 9px;
+  background: #000;
+  border: 2px solid var(--primary-40);
+  color: var(--primary-60);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.tab:hover {
+  border-color: var(--primary-60);
+  color: var(--primary-80);
+}
+
+.tab.active {
+  background: var(--primary-10);
+  border-color: var(--primary-90);
+  color: var(--hudText);
+}
+
+.tab:active {
+  transform: scale(0.95);
+}
+
+.leaderboardTab {
+  flex: 1;
+  max-width: 150px;
+  padding: 10px 12px;
+  font-size: 9px;
+  background: #000;
+  border: 2px solid var(--primary-40);
+  color: var(--primary-60);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.leaderboardTab:hover {
+  border-color: var(--primary-60);
+  color: var(--primary-80);
+}
+
+.leaderboardTab.active {
+  background: var(--primary-10);
+  border-color: var(--primary-90);
+  color: var(--hudText);
+}
+
+.leaderboardTab:active {
+  transform: scale(0.95);
+}
+
+.leaderboardList {
+  margin: 20px 0;
+  padding: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for leaderboard */
+.leaderboardList::-webkit-scrollbar {
+  width: 12px;
+}
+
+.leaderboardList::-webkit-scrollbar-track {
+  background: #000;
+  border: 2px solid var(--primary-30);
+  border-radius: 0;
+}
+
+.leaderboardList::-webkit-scrollbar-thumb {
+  background: var(--primary-70);
+  border-radius: 0;
+  border: 2px solid #000;
+}
+
+.leaderboardList::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-90);
+}
+
+/* Firefox scrollbar */
+.leaderboardList {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-70) #000;
+}
+
+/* Leaderboard header row */
+.leaderboardHeader {
+  display: grid;
+  grid-template-columns: 50px 70px 20px 90px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  background: var(--primary-color);
+  border: 2px solid var(--primary-90);
+  color: #000000;
+}
+
+.leaderboardHeaderRank,
+.leaderboardHeaderName,
+.leaderboardHeaderStickers,
+.leaderboardHeaderPoints {
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.leaderboardHeaderPoints {
+  margin-left: 22px;
+}
+
+
+.leaderboardStickerIcon {
+  height: 20px;
+  width: auto;
+  image-rendering: pixelated;
+  vertical-align: middle;
+}
+
+/* Leaderboard entry rows */
+.leaderboardEntry {
+  display: grid;
+  grid-template-columns: 50px 70px 20px 90px;
+  gap: 8px;
+  align-items: center;
+  padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 16px); /* Increased padding */
+  margin-bottom: 8px;
+  background: #000;
+  border: 2px solid var(--primary-40);
+  color: var(--hudText);
+  font-size: 14px;
+}
+
+.leaderboardEntry:first-child {
+  border-color: var(--primary-90);
+  background: var(--primary-10);
+}
+
+.leaderboardEntry:nth-child(2) {
+  border-color: var(--theme-color);
+}
+
+.leaderboardEntry:nth-child(3) {
+  border-color: var(--theme-color);
+}
+
+.leaderboardRank {
+  font-weight: bold;
+  text-align: center;
+}
+
+.leaderboardName {
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;                       /* Allow flex shrinking */
+}
+
+.leaderboardStickers {
+  font-weight: bold;
+  text-align: center !important;
+  color: #FFFFFF;
+  place-self: center;
+}
+
+.leaderboardScore {
+  font-weight: bold;
+  text-align: center;
+  color: var(--hudText);
+  margin-left: 22px;
+}
+
+.leaderboardEmpty {
+  font-size: 10px;
+  color: var(--theme-color-60);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* Settings overlay */
+.settingsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px 20px;
+  max-width: 320px;
+}
+
+/* Stats overlay */
+.statsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 20px;
+  max-width: 320px;
+  position: relative;
+}
+
+.achievementsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.achievementSlot {
+  aspect-ratio: 1;
+  background: #000;
+  border: 3px solid #666; /* Grey border for locked achievements */
+  box-sizing: border-box;
+  image-rendering: pixelated;
+  transition: transform 0.1s ease, border-color 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.achievementSlot:hover {
+  opacity: 0.8;
+}
+
+.achievementSlot:active {
+  transform: scale(0.95);
+}
+
+.achievementSlot.unlocked {
+  border: 3px solid var(--theme-color); /* Yellow border for unlocked achievements */
+}
+
+.achievementSlot img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  margin: auto;
+}
+
+/* Achievement Detail Overlay */
+.achievementDetail {
+  position: absolute;
+  top: calc(24px + 20px + 16px + 12px + 20px); /* padding-top + title height + gap + margin-top + adjustment */
+  left: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #000;
+  border: 3px solid #666;
+  padding: 16px;
+  gap: 12px;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.achievementDetail.unlocked {
+  border: 3px solid var(--theme-color);
+}
+
+.achievementDetailLeft {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.achievementDetailLeft img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.achievementDetailRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.achievementDetailTitle {
+  font-size: 10px;
+  color: #666;
+  text-align: left;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.achievementDetail.unlocked .achievementDetailTitle {
+  color: var(--theme-color);
+}
+
+.achievementDetailDesc {
+  font-size: 7px;
+  color: #666;
+  text-align: left;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.achievementDetail.unlocked .achievementDetailDesc {
+  color: var(--theme-color);
+}
+
+.achievementDetail .btn {
+  align-self: flex-start;
+  padding: 6px 16px;
+  font-size: 8px;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #000;
+  border: 2px solid var(--theme-color);
+}
+
+.statLabel {
+  font-size: 10px;
+  color: var(--hudText);
+}
+
+.statValue {
+  font-size: 12px;
+  color: var(--hudText);
+  font-weight: bold;
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.settingLabel {
+  font-size: 10px;
+  color: var(--hudText);
+  min-width: 70px;
+  text-align: left;
+}
+
+.settingSlider {
+  flex: 1;
+  height: 24px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #000;
+  border: 2px solid var(--theme-color);
+  border-radius: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.settingSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 20px;
+  background: var(--theme-color-90);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.settingSlider::-moz-range-thumb {
+  width: 16px;
+  height: 20px;
+  background: var(--theme-color-90);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.settingValue {
+  font-size: 10px;
+  color: var(--hudText);
+  min-width: 30px;
+  text-align: right;
+}
+
+.toggleBtn {
+  flex: 1;
+  padding: 8px 16px;
+  font-size: 10px;
+  background: var(--theme-color-20);
+  border: 2px solid var(--theme-color);
+  color: var(--hudText);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.toggleBtn.disabled {
+  background: rgba(128,128,128,0.2);
+  border-color: #808080;
+  color: rgba(128,128,128,0.6);
+  cursor: not-allowed;
+}
+
+.toggleBtn.off {
+  background: #000;
+  border-color: var(--theme-color);
+  color: var(--theme-color-60);
+}
+
+/* Pause overlay */
+.pauseCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 20px;
+  max-width: 320px;
+  width: 100%;
+}
+
+.pauseCard .title {
+  margin-bottom: 8px;
+}
+
+.pauseCard .btn {
+  width: 100%;
+}
+
+.confirmCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 20px;
+  max-width: 300px;
+  width: 100%;
+}
+
+.confirmCard .title {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.confirmCard .subtitle {
+  font-size: 9px;
+  text-align: center;
+  color: var(--theme-color-80);
+}
+
+/* ===== KONAMI CODE POPUP ===== */
+#konamiOverlay {
+  z-index: 1000 !important; /* Ensure above everything */
+}
+
+.konamiCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 20px;
+  max-width: 320px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.95) !important;
+  border: 3px solid var(--primary-70) !important;
+}
+
+.konamiCard .title {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--hudText);
+}
+
+.konamiButtonRow {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+}
+
+.konamiBtn {
+  flex: 1;
+  max-width: 90px;
+  font-size: 16px !important;
+  padding: 20px 16px !important;
+  background: #000 !important;
+  border: 3px solid var(--primary-70) !important;
+  color: var(--hudText) !important;
+  transition: all 0.15s ease;
+}
+
+/* START button has longer text, needs smaller font */
+#konamiStartBtn {
+  font-size: 12px !important;
+  padding: 20px 8px !important;
+}
+
+.konamiBtn:hover {
+  background: var(--theme-color-10) !important;
+  border-color: var(--hudText) !important;
+}
+
+.konamiBtn:active {
+  transform: scale(0.9) translateY(2px);
+  background: var(--theme-color-20) !important;
+}
+
+.konamiBtn.pressed {
+  background: rgba(76, 175, 80, 0.3) !important;
+  border-color: #4CAF50 !important;
+  color: #4CAF50 !important;
+}
+/* ===== END KONAMI CODE POPUP ===== */
+
+/* ===== SECRET LEVEL OVERLAYS ===== */
+#secretGameOverOverlay .btn {
+  margin-top: 8px;
+}
+/* ===== END SECRET LEVEL OVERLAYS ===== */
+
+/* ===== SHARE PREVIEW OVERLAY ===== */
+#shareCanvas {
+  max-width: 100%;
+  height: auto;
+  border: 3px solid var(--panelBorder);
+  margin: 16px 0;
+  display: block;
+}
+
+#sharePreviewOverlay .pixelCard {
+  max-width: 600px;
+}
+/* ===== END SHARE PREVIEW OVERLAY ===== */
+
+/* ===== GESTURE TUTORIAL ===== */
+.gestureTutorial {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1; /* Above background, below canvas and all UI elements */
+  display: flex;
+  opacity: 0;
+  animation: tutorialFadeIn 0.5s ease forwards;
+}
+
+@keyframes tutorialFadeIn {
+  to { opacity: 1; }
+}
+
+.gestureTutorial.fadeOut {
+  animation: tutorialFadeOut 0.5s ease forwards;
+}
+
+@keyframes tutorialFadeOut {
+  to { opacity: 0; }
+}
+
+.tapZoneBox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: var(--theme-color-0);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 120px; /* Position text near player at Y=470 */
+  opacity: 1;
+}
+
+.leftZone {
+  left: 0;
+  animation: tapPulseLeft 2s ease-in-out infinite;
+}
+
+.rightZone {
+  right: 0;
+  animation: tapPulseRight 2s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes tapPulseLeft {
+  0%, 40%, 100% {
+    background: var(--theme-color-0);
+  }
+  10%, 30% {
+    background: var(--theme-color-30);
+  }
+  20% {
+    background: var(--theme-color-15);
+  }
+}
+
+@keyframes tapPulseRight {
+  0%, 40%, 100% {
+    background: var(--theme-color-0);
+  }
+  10%, 30% {
+    background: var(--theme-color-30);
+  }
+  20% {
+    background: var(--theme-color-15);
+  }
+}
+
+.tapZoneBox .tapText {
+  font-size: 10px;
+  color: #000000;
+  letter-spacing: 1px;
+  text-align: center;
+  line-height: 1.6;
+}
+/* ===== END GESTURE TUTORIAL ===== */
+
+/* ===== ARCADE CREDIT DISPLAY ===== */
+.arcadeCreditDisplay {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  pointer-events: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.insertCoinMessage {
+  color: var(--primary-color);
+  text-shadow: 0 0 10px var(--primary-glow);
+  animation: coinBlink 1.5s infinite;
+  white-space: nowrap;
+}
+
+.creditCounter {
+  color: var(--primary-color);
+  text-shadow: 0 0 8px var(--primary-glow);
+  white-space: nowrap;
+}
+
+@keyframes coinBlink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes buttonShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+@keyframes strokeFlashRed {
+  0%, 24% { border-color: var(--primary-color); }
+  25%, 49% { border-color: #ff0000; }
+  50%, 74% { border-color: var(--primary-color); }
+  75%, 100% { border-color: #ff0000; }
+}
+
+@keyframes textBlinkNoCredits {
+  0%, 24% { opacity: 1; }
+  25%, 49% { opacity: 0; }
+  50%, 74% { opacity: 1; }
+  75%, 100% { opacity: 0; }
+}
+
+.btn.noCreditsShake {
+  animation: buttonShake 0.6s ease-in-out, strokeFlashRed 0.6s step-end;
+}
+
+.btn.noCreditsText {
+  color: #ff0000 !important;
+  animation: textBlinkNoCredits 0.6s step-end;
+}
+
+/* Hide credit display during gameplay */
+.arcadeCreditDisplay.hideInGame {
+  display: none;
+}
+
+/* Intro skip indicator */
+.introSkipIndicator {
+  position: absolute;
+  bottom: 90px; /* Just above the bottom banner */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 150;
+  pointer-events: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--primary-color);
+  text-shadow: 0 0 8px var(--primary-glow);
+  animation: skipPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skipPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+/* ===== END ARCADE CREDIT DISPLAY ===== */
+
+/* ===== ARCADE GAME INTRO SEQUENCE ===== */
+#gameIntroContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 140; /* Below boss so beam appears behind */
+}
+
+#introBeam {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  z-index: 140; /* Below boss */
+  background: linear-gradient(to bottom, 
+    rgba(224, 255, 0, 0.9) 0%,
+    rgba(224, 255, 0, 0.7) 50%,
+    rgba(224, 255, 0, 0.5) 100%
+  );
+  box-shadow: 
+    0 0 20px rgba(224, 255, 0, 0.8),
+    0 0 40px rgba(224, 255, 0, 0.6),
+    inset 0 0 20px rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#introBeam.active {
+  opacity: 1;
+}
+
+#introStickersContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.introSticker {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+}
+
+@keyframes goatShakeIntro {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-3px, 2px); }
+  20% { transform: translate(3px, -2px); }
+  30% { transform: translate(-2px, 3px); }
+  40% { transform: translate(2px, -3px); }
+  50% { transform: translate(-3px, -2px); }
+  60% { transform: translate(3px, 2px); }
+  70% { transform: translate(-2px, -3px); }
+  80% { transform: translate(2px, 3px); }
+  90% { transform: translate(-3px, 1px); }
+}
+/* ===== END ARCADE GAME INTRO ===== */
+
+/* ===== ARCADE NAME ENTRY OVERLAY ===== */
+.arcadeNameEntryCard {
+  background: var(--bg);
+  border: 4px solid var(--primary-color);
+  padding: 20px;
+  max-width: 340px;
+  width: 90%;
+  box-shadow: 0 0 20px var(--primary-glow);
+  overflow: hidden;
+  position: relative;
+}
+
+.arcadeEntryTitle {
+  font-size: 16px;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px var(--primary-glow);
+}
+
+.arcadeNameDisplay {
+  font-size: 14px;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--primary-40);
+  min-height: 35px;
+  letter-spacing: 3px;
+}
+
+.arcadeAlphabetGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.arcadeLetterBtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--white);
+  background: var(--primary-20);
+  border: 2px solid var(--primary-40);
+  padding: 8px 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.arcadeLetterBtn:hover {
+  background: var(--primary-35);
+  border-color: var(--primary-60);
+}
+
+.arcadeLetterBtn.focused {
+  background: var(--primary-color);
+  color: var(--bg);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-glow);
+  transform: scale(1.1);
+}
+
+.arcadeEntryControls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.arcadeControlBtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--white);
+  background: var(--primary-28);
+  border: 2px solid var(--primary-40);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.arcadeControlBtn:hover {
+  background: var(--primary-40);
+  border-color: var(--primary-60);
+}
+
+.arcadeControlBtn.focused {
+  background: var(--primary-color);
+  color: var(--bg);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+/* ===== END ARCADE NAME ENTRY ===== */

@@ -1,0 +1,16 @@
+[Unit]
+Description=Sticker Snatch Game Web Server
+After=network.target
+
+[Service]
+Type=simple
+User=arcade
+WorkingDirectory=/home/arcade/stickersnatch-arcade
+ExecStart=/usr/bin/python3 -m http.server 8080
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

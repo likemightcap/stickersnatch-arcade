@@ -395,6 +395,7 @@
       bitch: `${BASE_URL}assets/sounds/lilbitch.mp3`,
       thick: `${BASE_URL}assets/sounds/thick.mp3`,
       nooooo: `${BASE_URL}assets/sounds/nooooo.mp3`,
+      tractorBeam: `${BASE_URL}assets/sounds/tractor-beam.mp3`,
     }
   };
 
@@ -3548,6 +3549,11 @@ async function playGameIntroSequence() {
     
     // Phase 2: Beam descends slowly (10s - 11s)
     introTimeouts.push(setTimeout(() => {
+      // Play tractor beam sound
+      const tractorBeamAudio = new Audio(ASSETS.sounds.tractorBeam);
+      tractorBeamAudio.volume = (sfxVolume / 100) * 0.7;
+      tractorBeamAudio.play().catch(err => console.log('Tractor beam audio play failed:', err));
+      
       introBeamActive = true;
       introBeamHeight = 0;
       const beamDescendDuration = (timeline.beamDescendEnd - timeline.beamDescendStart) * 1000;
